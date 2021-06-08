@@ -1,5 +1,7 @@
 <?php
   include 'lib/secure.php';
+  include 'lib/connect.php';
+  include 'lib/queryArticle.php';
   include 'lib/article.php';
 
   $title = "";        // タイトル
@@ -13,7 +15,9 @@
     $body = $_POST['body'];
     
     $article = new Article();
-    $article->create($title, $body);
+    $article->setTitle($title);
+    $article->setBody($body);
+    $article->save();
     header('Location: backend.php');
   } else if(!empty($_POST)) {
     // POSTメソッドで送信されたが、titleかbodyが足りないとき

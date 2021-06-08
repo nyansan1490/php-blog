@@ -8,27 +8,12 @@ class Article{
   private $db;
 
   public function __construct(){
-    include __DIR__.'/connect.php';
-    $this->db = new connect();
   }
 
-  public function create($title, $body){
-    $sql = "INSERT INTO articles (title, body, created_at, updated_at)
-            VALUES (:title, :body, NOW(), NOW())";
-    $this->db->query($sql, array(':title' => $title, ':body' => $body));
-  }
-
-  public function find($id){
-    $sql = "SELECT * FROM articles WHERE id=:id";
-    $stmt = $this->db->query($sql, array(':id' => $id));
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
-    if ($result){
-      $this->id = $result['id'];
-      $this->title = $result['title'];
-      $this->body = $result['body'];
-      $this->created_at = $result['created_at'];
-      $this->updated_at = $result['updated_at'];
-    }
+  public function save(){
+    $queryArticle = new QueryArticle();
+    $queryArticle->setArticle($this);
+    $queryArticle->save();
   }
 
   public function getId(){
@@ -41,5 +26,33 @@ class Article{
 
   public function getBody(){
     return $this->body;
+  }
+
+  public function getCreatedAt(){
+    return $this->created_at;
+  }
+
+  public function getUpdatedAt(){
+    return $this->updated_at;
+  }
+
+  public function setId($id){
+    $this->id = $id;
+  }
+
+  public function setTitle($title){
+    $this->title = $title;
+  }
+
+  public function setBody($body){
+    $this->body = $body;
+  }
+
+  public function setCreatedAt($created_at){
+    $this->created_at = $created_at;
+  }
+
+  public function setUpdatedAt($updated_at){
+    $this->updated_at = $updated_at;
   }
 }
