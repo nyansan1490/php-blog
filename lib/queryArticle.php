@@ -13,6 +13,12 @@ class QueryArticle extends connect{
   public function save(){
     if ($this->article->getId()){
       // IDがあるときは上書き
+      $stmt = $this->dbh->prepare("UPDATE articles
+                SET title=:title, body=:body, updated_at=NOW() WHERE id=:id");
+      $stmt->bindParam(':title', $this->article->getTitle(), PDO::PARAM_STR);
+      $stmt->bindParam(':body', $this->article->getBody(), PDO::PARAM_STR);
+      $stmt->bindParam(':id', $this->article->getId(), PDO::PARAM_INT);
+      $stmt->execute();
     } else {
       // IDがなければ新規作成
       $stmt = $this->dbh->prepare("INSERT INTO articles (title, body, created_at, updated_at)
