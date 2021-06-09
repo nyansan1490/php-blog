@@ -83,10 +83,22 @@ class QueryArticle extends connect{
     if ($this->article->getId()){
       // IDがあるときは上書き
       $id = $this->article->getId();
+
+      // ファイルが既にあり、新しいファイルがアップロードされたときは
+      // 古いファイルを削除し、新しいファイルをアップロードする
+      if ($this->article->getFilename() && $file = $this->article->getFile()){
+        unlink(__DIR__.'/../album/thumbs-'.$this->article->getFilename());
+        unlink(__DIR__.'/../album/'.$this->article->getFilename());
+        $this->article->setFilename($this->saveFile($file['tmp_name']));
+        $filename = $this->article->getFilename();
+      }
+
       $stmt = $this->dbh->prepare("UPDATE articles
-                SET title=:title, body=:body, updated_at=NOW() WHERE id=:id");
+                SET title=:title, body=:body, filename=:filename, updated_at=NOW()
+                WHERE id=:id");
       $stmt->bindParam(':title', $title, PDO::PARAM_STR);
       $stmt->bindParam(':body', $body, PDO::PARAM_STR);
+      $stmt->bindParam(':filename', $filename, PDO::PARAM_STR);
       $stmt->bindParam(':id', $id, PDO::PARAM_INT);
       $stmt->execute();
     } else {
