@@ -11,20 +11,59 @@ class QueryArticle extends connect{
   }
 
   public function save(){
+    // bindParam用
+    $title = $this->article->getTitle();
+    $body = $this->article->getBody();
+    $filename = null;
+
     if ($this->article->getId()){
       // IDがあるときは上書き
+      $id = $this->article->getId();
       $stmt = $this->dbh->prepare("UPDATE articles
                 SET title=:title, body=:body, updated_at=NOW() WHERE id=:id");
-      $stmt->bindParam(':title', $this->article->getTitle(), PDO::PARAM_STR);
-      $stmt->bindParam(':body', $this->article->getBody(), PDO::PARAM_STR);
-      $stmt->bindParam(':id', $this->article->getId(), PDO::PARAM_INT);
+      $stmt->bindParam(':title', $title, PDO::PARAM_STR);
+      $stmt->bindParam(':body', $body, PDO::PARAM_STR);
+      $stmt->bindParam(':id', $id, PDO::PARAM_INT);
       $stmt->execute();
     } else {
       // IDがなければ新規作成
-      $stmt = $this->dbh->prepare("INSERT INTO articles (title, body, created_at, updated_at)
-                VALUES (:title, :body, NOW(), NOW())");
-      $stmt->bindParam(':title', $this->article->getTitle(), PDO::PARAM_STR);
-      $stmt->bindParam(':body', $this->article->getBody(), PDO::PARAM_STR);
+      if ($file = $this->article->getFile()){
+        $old_name = $file['tmp_name'];
+        $new_name = date('YmdHis').mt_rand();
+
+        // アップロード可否を決める変数。デフォルトはアップロード不可
+        $is_upload = false;
+
+        // 画像の種類を取得する
+        $size = getimagesize($old_name);
+        if (isset($size[2])){
+          // ファイルの種類が画像だったとき、種類によって拡張子を変更
+          switch ($size[2]){
+            case IMAGETYPE_JPEG:
+              $new_name .= '.jpg';
+              $is_upload = true;
+              break;
+            case IMAGETYPE_GIF:
+              $new_name .= '.gif';
+              $is_upload = true;
+              break;
+            case IMAGETYPE_PNG:
+              $new_name .= '.png';
+              $is_upload = true;
+              break;
+          }
+        }
+        
+        if ($is_upload && move_uploaded_file($old_name, __DIR__.'/../album/'.$new_name)){
+          $this->article->setFilename($new_name);
+          $filename = $this->article->getFilename();
+        }
+      }
+      $stmt = $this->dbh->prepare("INSERT INTO articles (title, body, filename, created_at, updated_at)
+                VALUES (:title, :body, :filename, NOW(), NOW())");
+      $stmt->bindParam(':title', $title, PDO::PARAM_STR);
+      $stmt->bindParam(':body', $body, PDO::PARAM_STR);
+      $stmt->bindParam(':filename', $filename, PDO::PARAM_STR);
       $stmt->execute();
     }
   }
@@ -40,6 +79,7 @@ class QueryArticle extends connect{
       $article->setId($result['id']);
       $article->setTitle($result['title']);
       $article->setBody($result['body']);
+      $article->setFilename($result['filename']);
       $article->setCreatedAt($result['created_at']);
       $article->setUpdatedAt($result['updated_at']);
     }
@@ -56,6 +96,7 @@ class QueryArticle extends connect{
       $article->setId($result['id']);
       $article->setTitle($result['title']);
       $article->setBody($result['body']);
+      $article->setFilename($result['filename']);
       $article->setCreatedAt($result['created_at']);
       $article->setUpdatedAt($result['updated_at']);
       $articles[] = $article;
