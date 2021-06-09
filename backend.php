@@ -60,9 +60,11 @@
             <th>ID</th>
             <th>タイトル</th>
             <th>本文</th>
+            <th>画像</th>
             <th>作成日</th>
             <th>更新日</th>
             <th>編集</th>
+            <th>削除</th>
           </tr>
         </thead>
         <tbody>
@@ -71,9 +73,11 @@
             <td><?php echo $article->getId() ?></td>
             <td><?php echo $article->getTitle() ?></td>
             <td><?php echo $article->getBody() ?></td>
+            <td><?php echo $article->getFilename()? 'あり': 'なし' ?></td>
             <td><?php echo $article->getCreatedAt() ?></td>
             <td><?php echo $article->getUpdatedAt() ?></td>
             <td><a href="edit.php?id=<?php echo $article->getId() ?>" class="btn btn-success">編集</a></td>
+            <td><a href="delete.php?id=<?php echo $article->getId() ?>" class="btn btn-danger">削除</a></td>
           </tr>
 <?php endforeach ?>
         </tbody>
@@ -83,6 +87,7 @@
         <p>記事はありません。</p>
       </div>
 <?php endif ?>
+
 
     </div>
 
