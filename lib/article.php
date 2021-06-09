@@ -1,10 +1,12 @@
 <?php
 class Article{
-  private $id;
-  private $title;
-  private $body;
-  private $created_at;
-  private $updated_at;
+  private $id = null;
+  private $title = null;
+  private $body = null;
+  private $filename = null;
+  private $file = null;
+  private $created_at = null;
+  private $updated_at = null;
   private $db;
 
   public function __construct(){
@@ -28,6 +30,14 @@ class Article{
     return $this->body;
   }
 
+  public function getFilename(){
+    return $this->filename;
+  }
+
+  public function getFile(){
+    return $this->file;
+  }
+
   public function getCreatedAt(){
     return $this->created_at;
   }
@@ -46,6 +56,14 @@ class Article{
 
   public function setBody($body){
     $this->body = $body;
+  }
+
+  public function setFile($file){
+    $this->file = $file;
+  }
+
+  public function setFilename($filename){
+    $this->filename = $filename;
   }
 
   public function setCreatedAt($created_at){
