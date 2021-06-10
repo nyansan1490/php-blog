@@ -93,9 +93,11 @@ class QueryArticle extends connect{
       }
 
       $stmt = $this->dbh->prepare("UPDATE articles
-                SET title=:title, body=:body, updated_at=NOW() WHERE id=:id");
+                SET title=:title, body=:body, filename=:filename, updated_at=NOW()
+                WHERE id=:id");
       $stmt->bindParam(':title', $title, PDO::PARAM_STR);
       $stmt->bindParam(':body', $body, PDO::PARAM_STR);
+      $stmt->bindParam(':filename', $filename, PDO::PARAM_STR);
       $stmt->bindParam(':id', $id, PDO::PARAM_INT);
       $stmt->execute();
     } else {
