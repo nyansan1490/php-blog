@@ -19,6 +19,18 @@ class QueryCategory extends connect{
     $stmt->execute();
   }
 
+  public function findAll(){
+    $stmt = $this->dbh->prepare("SELECT * FROM categories");
+    $stmt->execute();
+    $categories = array();
+    foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $result){
+      $category = new Category();
+      $category->setId($result['id']);
+      $category->setName($result['name']);
+      $categories[$result['id']] = $category;
+    }
+    return $categories;
+  }
 }
 
 class Category{
