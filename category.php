@@ -4,11 +4,24 @@
   include('lib/queryCategory.php');
 
   $queryCategory = new QueryCategory();
+  $category = null; // 編集するカテゴリ情報
 
   if (!empty($_POST['action']) && $_POST['action'] == 'add' && !empty($_POST['name'])){
     $category = new Category();
     $category->setName($_POST['name']);
     $category->save();
+    $category = null; // 登録後、データをnullにする
+  } else if(!empty($_GET['action']) && $_GET['action'] == 'edit' && !empty($_GET['id'])){
+    // 編集モードのとき
+    $category = $queryCategory->find($_GET['id']);
+  } else if(!empty($_POST['action']) && $_POST['action'] == 'edit' && !empty($_POST['id']) && !empty($_POST['name'])){
+    // 編集
+    $category = $queryCategory->find($_POST['id']);
+    if ($category){
+      $category->setName($_POST['name']);
+      $category->save();
+    }
+    $category = null;
   }
 
   // 登録されているカテゴリーをすべて取得
@@ -59,6 +72,23 @@
     <div class="col-md-12">
 
       <h1>カテゴリー</h1>
+
+<?php if ($category): ?>
+      <h2>編集</h2>
+      <form action="category.php" method="post" class="row">
+        <input type="hidden" name="action" value="edit">
+        <input type="hidden" name="id" value="<?php echo $category->getId() ?>">
+        <div class="col-md-6">
+          <input type="text" name="name" value="<?php echo $category->getName() ?>" class="form-control">
+        </div>
+        <div class="col-md-6">
+          <button type="submit" class="btn btn-primary">編集する</button>
+        </div>
+      </form>
+
+      <hr>
+<?php endif ?>
+
 
       <h2>新規追加</h2>
       <form action="category.php" method="post" class="row">
