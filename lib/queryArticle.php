@@ -78,7 +78,8 @@ class QueryArticle extends connect{
     // bindParam用
     $title = $this->article->getTitle();
     $body = $this->article->getBody();
-    $filename = null;
+    $filename = $this->article->getFilename();;
+    $category_id = $this->article->getCategoryId();
 
     if ($this->article->getId()){
       // IDがあるときは上書き
@@ -87,32 +88,30 @@ class QueryArticle extends connect{
       // ファイルが既にあり、新しいファイルがアップロードされたときは
       // 古いファイルを削除し、新しいファイルをアップロードする
       if ($this->article->getFilename() && $file = $this->article->getFile()){
+        var_dump($file);
+        exit;
         $this->deleteFile($this->article->getFilename());
         $this->article->setFilename($this->saveFile($file['tmp_name']));
         $filename = $this->article->getFilename();
       }
-
       $stmt = $this->dbh->prepare("UPDATE articles
-                SET title=:title, body=:body, filename=:filename, updated_at=NOW()
+                SET title=:title, body=:body, filename=:filename, category_id=:category_id, updated_at=NOW()
                 WHERE id=:id");
-      $stmt->bindParam(':title', $title, PDO::PARAM_STR);
-      $stmt->bindParam(':body', $body, PDO::PARAM_STR);
-      $stmt->bindParam(':filename', $filename, PDO::PARAM_STR);
       $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-      $stmt->execute();
     } else {
       // IDがなければ新規作成
       if ($file = $this->article->getFile()){
         $this->article->setFilename($this->saveFile($file['tmp_name']));
         $filename = $this->article->getFilename();
       }
-      $stmt = $this->dbh->prepare("INSERT INTO articles (title, body, filename, created_at, updated_at)
-                VALUES (:title, :body, :filename, NOW(), NOW())");
-      $stmt->bindParam(':title', $title, PDO::PARAM_STR);
-      $stmt->bindParam(':body', $body, PDO::PARAM_STR);
-      $stmt->bindParam(':filename', $filename, PDO::PARAM_STR);
-      $stmt->execute();
+      $stmt = $this->dbh->prepare("INSERT INTO articles (title, body, filename, category_id, created_at, updated_at)
+                VALUES (:title, :body, :filename, :category_id, NOW(), NOW())");
     }
+    $stmt->bindParam(':title', $title, PDO::PARAM_STR);
+    $stmt->bindParam(':body', $body, PDO::PARAM_STR);
+    $stmt->bindParam(':filename', $filename, PDO::PARAM_STR);
+    $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT);
+    $stmt->execute();
   }
 
   private function deleteFile($filename){
@@ -211,6 +210,7 @@ class QueryArticle extends connect{
       $article->setTitle($result['title']);
       $article->setBody($result['body']);
       $article->setFilename($result['filename']);
+      $article->setCategoryId($result['category_id']);
       $article->setCreatedAt($result['created_at']);
       $article->setUpdatedAt($result['updated_at']);
       $articles[] = $article;
