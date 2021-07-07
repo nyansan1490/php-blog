@@ -69,7 +69,7 @@
       $id = $_POST['id'];
     } else {
       // 編集する記事IDがセットされていなければ、backend.phpへ戻る
-      header('Location: background.php');
+      header('Location: backend.php');
       exit;
     }
 
