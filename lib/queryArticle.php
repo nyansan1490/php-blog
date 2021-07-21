@@ -57,7 +57,7 @@ class QueryArticle extends connect{
         default:
           // JPEG・GIF・PNG以外の画像なら処理しない
           imagedestroy($canvas);
-          return false;
+          return null;
       }
       imagedestroy($canvas);
       imagedestroy($image);
@@ -70,7 +70,7 @@ class QueryArticle extends connect{
 
     } else {
       // 画像以外なら処理しない
-      return false;
+      return null;
     }
   }
 
