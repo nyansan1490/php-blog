@@ -85,12 +85,13 @@ class QueryArticle extends connect{
       // IDがあるときは上書き
       $id = $this->article->getId();
 
-      // ファイルが既にあり、新しいファイルがアップロードされたときは
-      // 古いファイルを削除し、新しいファイルをアップロードする
-      if ($this->article->getFilename() && $file = $this->article->getFile()){
-        var_dump($file);
-        exit;
-        $this->deleteFile($this->article->getFilename());
+      // 新しいファイルがアップロードされたとき
+      if ($file = $this->article->getFile()){
+        // ファイルが既にあり、新しいファイルがアップロードされたときは
+        // 古いファイルを削除する
+        if ($this->article->getFilename()){
+          $this->deleteFile($this->article->getFilename());
+        }
         $this->article->setFilename($this->saveFile($file['tmp_name']));
         $filename = $this->article->getFilename();
       }
