@@ -7,6 +7,8 @@
   if (!empty($_GET['id'])){
     $queryArticle = new QueryArticle();
     $article = $queryArticle->find($_GET['id']);
-    $article->delete();
+    if ($article){
+      $article->delete();
+    }
   }
   header('Location: backend.php');
