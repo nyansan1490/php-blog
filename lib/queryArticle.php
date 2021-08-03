@@ -87,14 +87,13 @@ class QueryArticle extends connect{
 
       // 新しいファイルがアップロードされたとき
       if ($file = $this->article->getFile()){
-        // ファイルが既にあり、新しいファイルがアップロードされたときは
-        // 古いファイルを削除する
-        if ($this->article->getFilename()){
-          $this->deleteFile($this->article->getFilename());
-        }
+        // ファイルが既にある場合、古いファイルを削除する
+        $this->deleteFile();
+        // 新しいファイルのアップロード
         $this->article->setFilename($this->saveFile($file['tmp_name']));
         $filename = $this->article->getFilename();
       }
+      
       $stmt = $this->dbh->prepare("UPDATE articles
                 SET title=:title, body=:body, filename=:filename, category_id=:category_id, updated_at=NOW()
                 WHERE id=:id");
@@ -115,17 +114,17 @@ class QueryArticle extends connect{
     $stmt->execute();
   }
 
-  private function deleteFile($filename){
-    unlink(__DIR__.'/../album/thumbs-'.$this->article->getFilename());
-    unlink(__DIR__.'/../album/'.$this->article->getFilename());
+  private function deleteFile(){
+    if ($this->article->getFilename()){
+      unlink(__DIR__.'/../album/thumbs-'.$this->article->getFilename());
+      unlink(__DIR__.'/../album/'.$this->article->getFilename());
+    }
   }
 
   public function delete(){
     if ($this->article->getId()){
       // 画像の削除
-      if ($this->article->getFilename()){
-        $this->deleteFile($this->article->getFilename());
-      }
+      $this->deleteFile();
 
       $id = $this->article->getId();
       $stmt = $this->dbh->prepare("UPDATE articles SET is_delete=1 WHERE id=:id");
