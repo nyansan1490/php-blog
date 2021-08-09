@@ -20,7 +20,7 @@
     <title>Blog</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
 
     <style>
       body {
@@ -42,7 +42,7 @@
     </style>
 
     <!-- Custom styles for this template -->
-    <link href="/css/blog.css" rel="stylesheet">
+    <link href="./css/blog.css" rel="stylesheet">
   </head>
   <body>
 
@@ -63,8 +63,8 @@
         <?php echo nl2br($article->getBody()) ?>
         <?php if ($article->getFilename()): ?>
         <div>
-          <a href="/album/<?php echo $article->getFilename() ?>" target="_blank">
-            <img src="/album/thumbs-<?php echo $article->getFilename() ?>" class="img-fluid">
+          <a href="./album/<?php echo $article->getFilename() ?>" target="_blank">
+            <img src="./album/thumbs-<?php echo $article->getFilename() ?>" class="img-fluid">
           </a>
         </div>
         <?php endif ?>

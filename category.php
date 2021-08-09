@@ -44,7 +44,7 @@
     <title>Blog Backend</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
 
     <style>
       body {
@@ -70,7 +70,7 @@
     </style>
 
     <!-- Custom styles for this template -->
-    <link href="blog.css" rel="stylesheet">
+    <link href="./css/blog.css" rel="stylesheet">
   </head>
   <body>
 

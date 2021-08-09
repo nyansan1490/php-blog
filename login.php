@@ -31,7 +31,7 @@
     <title>Blog</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
 
     <style>
       .bd-placeholder-img {
@@ -50,7 +50,7 @@
     </style>
 
     <!-- Custom styles for this template -->
-    <link href="/css/signin.css" rel="stylesheet">
+    <link href="./css/signin.css" rel="stylesheet">
   </head>
   <body class="text-center">
     
