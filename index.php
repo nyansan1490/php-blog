@@ -130,7 +130,7 @@
         <h4>アーカイブ</h4>
         <ol class="list-unstyled mb-0">
 <?php foreach($monthly as $m): ?>
-          <li><a href="/index.php?month=<?php echo $m['month'] ?>"><?php echo $m['month'] ?> (<?php echo $m['count'] ?>)</a></li>
+          <li><a href="index.php?month=<?php echo $m['month'] ?>"><?php echo $m['month'] ?> (<?php echo $m['count'] ?>)</a></li>
 <?php endforeach ?>
         </ol>
       </div>
@@ -139,7 +139,7 @@
         <h4>カテゴリ別アーカイブ</h4>
         <ol class="list-unstyled mb-0">
 <?php foreach ($category as $c): ?>
-          <li><a href="/index.php?category=<?php echo $c['id']? $c['id']: 0 ?>"><?php echo $c['name']? $c['name']: 'カテゴリーなし' ?>(<?php echo $c['count'] ?>)</a></li>
+          <li><a href="index.php?category=<?php echo $c['id']? $c['id']: 0 ?>"><?php echo $c['name']? $c['name']: 'カテゴリーなし' ?>(<?php echo $c['count'] ?>)</a></li>
 <?php endforeach ?>
         </ol>
       </div>
