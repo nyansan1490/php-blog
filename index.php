@@ -112,7 +112,7 @@
       <nav aria-label="Page navigation example">
         <ul class="pagination">
   <?php for ($i = 1; $i <= ceil($pager['total'] / $limit); $i++): ?>
-          <li class="page-item"><a class="page-link" href="index.php?page=<?php echo $i ?><?php echo $month? '&month='.$month : '' ?>"><?php echo $i ?></a></li>
+          <li class="page-item"><a class="page-link" href="index.php?page=<?php echo $i ?><?php echo $month? '&month='.$month : '' ?><?php echo !is_null($category_id)? '&category='.$category_id : '' ?>"><?php echo $i ?></a></li>
   <?php endfor ?>
         </ul>
       </nav>
