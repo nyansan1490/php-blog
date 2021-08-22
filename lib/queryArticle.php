@@ -149,7 +149,7 @@ class QueryArticle extends connect{
   }
 
   public function getPager($page = 1, $limit = 10, $month = null, $category_id = null){
-    $page = ($page - 1) * $limit;  // LIMIT x, y：開始ページ数は0から
+    $start = ($page - 1) * $limit;  // LIMIT x, y：開始ページ数は0から
     $pager = array('total' => null, 'articles' => null);
 
     // 月指定があれば「2021-01%」のように検索できるよう末尾に追加
@@ -189,7 +189,7 @@ class QueryArticle extends connect{
     } else {
       $stmt = $this->dbh->prepare($sql.$orderBy);
     }
-    $stmt->bindParam(':start', $page, PDO::PARAM_INT);
+    $stmt->bindParam(':start', $start, PDO::PARAM_INT);
     $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
     $stmt->execute();
     $pager['articles'] = $this->getArticles($stmt->fetchAll(PDO::FETCH_ASSOC));
